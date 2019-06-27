@@ -1,0 +1,133 @@
+<div class="container">
+<form  class="form-group" [formGroup]='addUserGroup' (submit)="AddNewUser()">
+    <div class="row">
+        <div class="col-sm-4">
+          <label for="firstName">First Name:</label>
+          <input  type="text" class="form-control" formControlName='firstName' [(ngModel)]="user.firstName" name="firstName"  required>
+          <div [hidden]="!(f.firstName.errors && f.firstName.touched)" >
+                <small  class="text-danger"  > Field is Required ! Please fill in the same </small>
+        </div>
+        </div>
+        <div class="col-sm-6">
+          <label for="pwd">Last Name:</label>
+          <input  type="text" class="form-control"  formControlName='lastName' [(ngModel)]="user.lastName" name="lastName"  >
+          <div [hidden]="!(f.lastName.errors && f.lastName.touched)" >
+                <small  class="text-danger"  >Field is Required ! Please fill in the same</small>
+        </div>
+        </div>
+        </div>
+        <br>
+        <div class="row">
+                <div class="col-sm-4">
+                        <label for="EmployeeId">EmployeeID:</label>
+                        <input  type="text" class="form-control" formControlName='employeeID' [(ngModel)]="user.employeeID" name="firstName"  required>
+                        <div [hidden]="!(f.employeeID.errors && f.employeeID.touched)" >
+                                <small  class="text-danger"  > Field is Required ! Please fill in the same </small>
+                        </div>
+                      </div>
+
+         </div>  
+         <br>
+         <div class="col-sm-6">
+                <input type="submit" [disabled]="!addUserGroup.valid" class="btn btn-primary" value="Add" >&nbsp;&nbsp;
+                <input type="button" class="btn btn-secondary"  value="reset"  (click)="reset();">
+          </div> 
+
+        </form>
+        <div class="row">
+              <div class="col-sm-5">
+      <input type="text" id="searchUser" class="form-control" [(ngModel)]="userName" placeholder="Search..." />
+    </div>
+
+    <br>
+    <div class="col-sm-6">
+      <label class="form-control-static">Sort By:</label>&nbsp;
+      <input type="button" value="First Name" class="btn btn-info" (click)="sortfunction('firstName')" ng-required="true"/>&nbsp;
+      <input type="button" value="Last Name" class="btn btn-info" (click)="sortfunction('lastName')" />&nbsp;
+      <input type="button" value="User Id" class="btn btn-info" (click)="sortfunction('employeeID')" />
+    </div>
+        </div>
+        <br>
+        <div class="row mb-2">
+                <div  class="col-sm-4"><b>First Name</b></div>
+                <div  class="col-sm-3"><b>Last Name</b></div>
+                <div  class="col-sm-3"><b>Employee ID</b></div>
+                <div></div>
+              </div>
+<div *ngFor="let user of userList |  searchUser : userName : 'firstName'">
+        <div class="row mb-2 bg-light">
+            <div  class="col-sm-4">{{user.firstName}}</div>
+            <div  class="col-sm-3">{{user.lastName}}</div>
+            <div  class="col-sm-3">{{user.employeeID}}</div>
+            <div class="col-sm-1"> <button type="button" class="btn btn-info btn-sm " data-toggle="modal" data-target="#myModal" (click)="openPopUp(user)">Edit</button></div>
+              <div class="col-sm-1">   <button type="button" class="btn btn-danger btn-sm" (click)="deleteUser(user.userID)" >Delete</button></div>
+          </div>
+    </div>
+    <br>
+    <div class="modal mainpage" tabindex="-1" role="dialog"  [ngStyle]="{'display':display}">
+      
+            <div class="modal-dialog" role="document">
+
+
+                    <div class="modal-content">
+
+          <div class="modal-header popupHeader">  Edit Task 
+                        <button type="button" class="close" aria-label="Close" (click)="closePopUp()"><span aria-hidden="true">&times;</span></button>
+                        
+                      </div>
+
+                            <div class="modal-body popupBody">
+                                <div class="container">
+                                        <form  class="form-group" [formGroup]='EditUserGroup' (submit)="EditUser()">
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                      <label for="firstName">First Name:</label>
+                                                      <input  type="text" class="form-control" formControlName='firstName' [(ngModel)]="userToBeEdited.firstName" name="firstName"  required>
+                                                      <div [hidden]="!(fa.firstName.errors && fa.firstName.touched)" >
+                                                            <small  class="text-danger"  > Field is Required ! Please fill in the same </small>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                      <label for="pwd">Last Name:</label>
+                                                      <input  type="text" class="form-control"  formControlName='lastName' [(ngModel)]="userToBeEdited.lastName" name="lastName"  >
+                                                      <div [hidden]="!(fa.lastName.errors && fa.lastName.touched)" >
+                                                            <small  class="text-danger"  >Field is Required ! Please fill in the same</small>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+                                                            <div class="col-sm-4">
+                                                                    <label for="EmployeeId">EmployeeID:</label>
+                                                                    <input  type="text" class="form-control" formControlName='employeeID' [(ngModel)]="userToBeEdited.employeeID" name="firstName"  required>
+                                                                    <div [hidden]="!(fa.employeeID.errors && fa.employeeID.touched)" >
+                                                                            <small  class="text-danger"  > Field is Required ! Please fill in the same </small>
+                                                                    </div>
+                                                                  </div>
+                                            
+                                                     </div>  
+                                                     <br>
+                                                     <div class="col-sm-6">
+                                                                <input type="submit" [disabled]="!EditUserGroup.valid" class="btn btn-primary" value="Update" >&nbsp;&nbsp;
+                                                                <input type="button" class="btn btn-secondary"  value="Cancel"  (click)="closePopUp();">
+                                                          </div> 
+                                            
+                                                    </form>   
+                                </div>
+                            </div>   
+                    </div>
+            </div>
+
+
+
+    </div>
+
+             
+            
+
+
+ 
+         
+
+
+
