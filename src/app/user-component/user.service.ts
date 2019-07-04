@@ -6,7 +6,8 @@ import {catchError} from "rxjs/internal/operators";
 import {map} from "rxjs/internal/operators";
 import { throwError } from 'rxjs';
 
-const Base_Url_User ="localhost:9000/ProjectManager/User"
+const Base_Url_User ="http://localhost:9000/user"
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,19 +16,40 @@ export class UserService {
   constructor(private http:HttpClient) { }
 
   addUser(user:User) : Observable<any>{
-    return this.http.post(Base_Url_User,user).pipe(
+    
+    return this.http.post(Base_Url_User+"/adduser",user).pipe(
       map((response :Response )=>this.formatResponse(response)),
       catchError(this.handleError)
       
-    )
+   )
    
+  }
+  
+
+  deleteUser(user:User) : Observable<any>
+  {
+    
+    
+    return this.http.delete(Base_Url_User+"/userDelete/"+user.userId).pipe(
+      map((response :Response )=>this.formatResponse(response)),
+      catchError(this.handleError)
+    )
+  }
+
+  updateUer(user:User) : Observable<any>{
+    return this.http.put(Base_Url_User+"/userUpdate",user).pipe(
+      map((response :Response )=>this.formatResponse(response)),
+      catchError(this.handleError)
+    )
   }
 
   getUsers(): Observable<any>
   {
-    return this.http.get(Base_Url_User).pipe(
+
+    
+    return this.http.get(Base_Url_User+'/userList').pipe(
     map((response :Response )=>this.formatResponse(response)),
-    catchError(this.handleError))
+    catchError(this.handleError));
   }
   handleError(error:Error):Observable<Error>
   {
@@ -36,6 +58,7 @@ export class UserService {
   }
   formatResponse(response:any)
   {
+    
     console.log(JSON.stringify(response))
     return response;
   }

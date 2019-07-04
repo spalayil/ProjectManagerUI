@@ -15,10 +15,12 @@ export class UserComponent implements OnInit {
   addUserGroup: FormGroup=null;
   EditUserGroup:FormGroup=null;
   user : User = new User;
-  display='block';
+  display='none';
   userToBeEdited:User= new User;
   public userList=[];
   ngOnInit() {
+
+    this.getUserData();
 
     this.addUserGroup= this.formBuilder.group({
 
@@ -32,18 +34,8 @@ export class UserComponent implements OnInit {
             'lastName': new FormControl(this.user.lastName,Validators.required),
             'employeeID': new FormControl(this.user.employeeID, Validators.required)
           })
-    this.userService.getUsers().subscribe(
-      result => {
-       
-        console.log(result);
-        this.userList = result;
-      },
-
-      error =>{
-        alert("ERROR WHILE FETCHING USER LIST:::"+JSON.stringify(error.message));
-      }
-    )
-
+  
+  
   }
 
   AddNewUser(){
@@ -53,17 +45,58 @@ export class UserComponent implements OnInit {
       result => {
        
         console.log(result)
+        alert("Succesfully added User!")
+        //Reloading the data
+        this.getUserData();
+        this.reset();
+        
       },
 
       error =>{
         alert("ERROR :::"+JSON.stringify(error.message));
+        this.getUserData();
+        this.reset();
       }
     )
 
   }
   EditUser()
   {
-    alert("Test::: Inside Edit")
+    this.userService.updateUer(this.userToBeEdited).subscribe(
+    
+      response =>{
+        alert("Sucessfully Edited!")
+        this.closePopUp();
+        this.getUserData();
+      },
+      error =>{
+
+        alert("ERROR :::"+JSON.stringify(error.message));
+      }
+
+
+    )
+
+  }
+
+  deleteUser(user:User)
+  {
+    
+    this.userService.deleteUser(user).subscribe(
+      
+        response =>{
+          alert("Sucessfully Deleted!")
+          this.closePopUp();
+          this.getUserData();
+        },
+        error =>{
+  
+          alert("ERROR :::"+JSON.stringify(error.message));
+        }
+  
+  
+      )
+  
   }
 
   get f()
@@ -95,6 +128,23 @@ export class UserComponent implements OnInit {
   {
 
     this.display='none';
+    this.getUserData();
+  }
+
+  getUserData()
+  {
+    
+    this.userService.getUsers().subscribe(
+      result => {
+       
+        console.log(result);
+        this.userList = result;
+      },
+
+      error =>{
+        alert("ERROR WHILE FETCHING USER LIST:::"+JSON.stringify(error.message));
+      }
+    )
   }
 
 }
